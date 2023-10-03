@@ -1,6 +1,8 @@
-# Image Compressor
+# Skycompress
 
 This module provides a function to compress images to a desired byte size using OpenCV.
+
+Sky is the limit.
 
 ## Dependencies
 - Python 3
@@ -26,7 +28,8 @@ The primary function in this module is `compress_image()`, which compresses an i
 ```python
 import cv2
 import numpy as np
-from image_compressor import compress_image  
+
+from skycompress import compress_image
 
 # Load the image
 img = cv2.imread("path_to_your_image.jpg")
