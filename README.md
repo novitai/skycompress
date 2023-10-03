@@ -26,13 +26,13 @@ The primary function in this module is `compress_image()`, which compresses an i
 ```python
 import cv2
 import numpy as np
-from image_compressor import compress_image  # Assuming the module is named image_compressor
+from image_compressor import compress_image  
 
 # Load the image
 img = cv2.imread("path_to_your_image.jpg")
 
 # Compress the image
-compressed_img_data = compress_image(img, "rgb", 5000)  # Compress to 5000 bytes in RGB format
+compressed_img_data = compress_image.compress_image(img, "rgb", 15000)  # Compress to 15000 bytes in RGB format
 
 # Save the compressed image
 with open("compressed_image.jpg", "wb") as f:
