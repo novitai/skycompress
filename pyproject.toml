@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "image-compression"
+name = "skycompress"
 version = "0.1.0"
 description = "Compress the image with binary search algorithm to find best fit dimension and quality"
 authors = ["Goksel Ozgur <gozgur@novit.ai>"]
@@ -8,7 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.8"
 numpy = "^1.23.5"
-opencv-python = "4.6.0.66"
+opencv-python = "^4.6.0.66"
 
 [build-system]
 requires = ["poetry-core"]

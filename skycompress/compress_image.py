@@ -32,7 +32,7 @@ def compress_image(original_img: npt.NDArray[np.float64], color_fmt: str, byte_l
         _, original_img = cv2.threshold(original_img, 127, 255, cv2.THRESH_BINARY)
         _, jpeg_data = cv2.imencode('.jpg', original_img, [int(cv2.IMWRITE_JPEG_QUALITY), jpeg_quality])
         jpeg_data = bytearray(jpeg_data)
-        outImageSize = len(jpeg_data)
+        out_image_size = len(jpeg_data)
 
     if color_fmt == 'gry':
 
@@ -40,14 +40,14 @@ def compress_image(original_img: npt.NDArray[np.float64], color_fmt: str, byte_l
         original_img = cv2.cvtColor(original_img, cv2.COLOR_BGR2GRAY)
         _, jpeg_data = cv2.imencode('.jpg', original_img, [int(cv2.IMWRITE_JPEG_QUALITY), jpeg_quality])
         jpeg_data = bytearray(jpeg_data)
-        outImageSize = len(jpeg_data)
+        out_image_size = len(jpeg_data)
 
     if color_fmt == 'rgb':
 
         # Save the initial image chip for a size on disk reference
         _, jpeg_data = cv2.imencode('.jpg', original_img, [int(cv2.IMWRITE_JPEG_QUALITY), jpeg_quality])
         jpeg_data = bytearray(jpeg_data)
-        outImageSize = len(jpeg_data)
+        out_image_size = len(jpeg_data)
 
     else:
         LOGGER.warning("Not a valid color format")
@@ -67,14 +67,14 @@ def compress_image(original_img: npt.NDArray[np.float64], color_fmt: str, byte_l
         
         new_img = cv2.resize(original_img, (0, 0), fx=mid_dimension, fy=mid_dimension)
         _, jpeg_data = cv2.imencode('.jpg', new_img, [int(cv2.IMWRITE_JPEG_QUALITY), mid_quality])
-        outImageSize = len(bytearray(jpeg_data))
-        if outImageSize <= byte_limit:
+        out_image_size = len(bytearray(jpeg_data))
+        if out_image_size <= byte_limit:
             return jpeg_data  # Exit early if we've hit the byte limit exactly
-        elif outImageSize < byte_limit:
+        elif out_image_size < byte_limit:
             if mid_quality > best_quality:
                 best_quality = mid_quality
                 best_dimension = mid_dimension
-                best_size = outImageSize
+                best_size = out_image_size
             min_quality = mid_quality + 10
             min_dimension = mid_dimension + 1
         else:
