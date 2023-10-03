@@ -28,6 +28,7 @@ The primary function in this module is `compress_image()`, which compresses an i
 ```python
 import cv2
 import numpy as np
+
 from skycompress import compress_image
 
 # Load the image
