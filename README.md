@@ -1,6 +1,8 @@
-# Image Compressor
+# Skycompress
 
 This module provides a function to compress images to a desired byte size using OpenCV.
+
+Sky is the limit.
 
 ## Dependencies
 - Python 3
