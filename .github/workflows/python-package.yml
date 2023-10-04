@@ -3,14 +3,13 @@ name: Pytest
 on:
   push:
     branches:
-      - master  # replace with your default branch if it's not "main"
+      - master
   pull_request:
     branches:
-      - master  # replace with your default branch if it's not "main"
+      - master
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -20,14 +19,16 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: 3.8  # or any other version
+        python-version: 3.8
 
-    - name: Install dependencies
+    - name: Install Poetry
       run: |
-        python -m pip install --upgrade pip
-        pip install numpy
-        pip install your_package_name  # replace with the actual name or path to your package
+        curl -sSL https://install.python-poetry.org | python3 -
 
-    - name: Run Pytest
+    - name: Install dependencies with Poetry
       run: |
-        pytest
+        poetry install
+
+    - name: Run Pytest with Poetry
+      run: |
+        poetry run pytest
