@@ -1,0 +1,44 @@
+name: Lint and type and sort checks
+
+on:
+  pull_request:
+  push:
+    branches: master
+
+jobs:
+  checks:
+
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check if changed files include python files
+        uses: technote-space/get-diff-action@v6
+        with:
+          DIFF_FILTER: 'ACDMRTUXB' # https://git-scm.com/docs/git-diff
+          PATTERNS: |
+            **.py
+            **/*.py
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+        if: env.GIT_DIFF
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip wheel
+          pip install flake8 isort mypy toml
+        if: env.GIT_DIFF
+      - name: Lint with flake8
+        run: |
+          # E402: module level import not at top of file
+          flake8 . --count --statistics --ignore=E402 --max-line-length 120
+        if: env.GIT_DIFF
+      - name: Validate types
+        run: |
+          mypy --install-types --non-interactive .
+        if: env.GIT_DIFF
+      - name: Sort check with isort
+        run: |
+          isort . --check-only
+        if: env.GIT_DIFF
