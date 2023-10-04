@@ -5,18 +5,15 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [3.7, 3.8, 3.9]  # You can adjust these versions as needed
-
+    
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: 3.8  # or any other specific version you prefer
 
     - name: Cache Poetry
       uses: actions/cache@v2
