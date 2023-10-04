@@ -38,22 +38,29 @@ def compress_image(original_img: npt.NDArray[np.float64], color_fmt: str, byte_l
 
     # Convert image to selected color format
     if color_fmt == 'bin':
-
-        # Save the initial image chip for a size on disk reference
+        # Check if the image is of type float64 (CV_64F)
+        if original_img.dtype == np.float64:
+            # Check the range of the image values
+            max_val = original_img.max()
+            if max_val <= 1.0:
+                # If values are in the range [0, 1], rescale to [0, 255]
+                original_img = (original_img * 255).astype(np.uint8)
+            else:
+                # If values are already in the range [0, 255] or higher, just convert type
+                original_img = original_img.astype(np.uint8)
+        # Now, you can safely convert from BGR to grayscale
         original_img = cv2.cvtColor(original_img, cv2.COLOR_BGR2GRAY)
-        _, original_img = cv2.threshold(original_img, 127, 255, cv2.THRESH_BINARY)
-        _, jpeg_data = cv2.imencode('.jpg', original_img, [int(cv2.IMWRITE_JPEG_QUALITY), jpeg_quality])
-        jpeg_data = bytearray(jpeg_data)
-        out_image_size = len(jpeg_data)
 
     if color_fmt == 'gry':
+        # Check if the original_img is not already grayscale
+        if len(original_img.shape) == 3 and original_img.shape[2] == 3:
+            original_img = cv2.cvtColor(original_img, cv2.COLOR_BGR2GRAY)
 
-        # Save the initial image chip for a size on disk reference
-        original_img = cv2.cvtColor(original_img, cv2.COLOR_BGR2GRAY)
         _, jpeg_data = cv2.imencode('.jpg', original_img, [int(cv2.IMWRITE_JPEG_QUALITY), jpeg_quality])
         jpeg_data = bytearray(jpeg_data)
+        # The following line can be removed if you're not using 'out_image_size' elsewhere
         out_image_size = len(jpeg_data)
-
+        
     if color_fmt == 'rgb':
 
         # Save the initial image chip for a size on disk reference
