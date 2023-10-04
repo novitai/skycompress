@@ -3,10 +3,10 @@ name: Pytest
 on:
   push:
     branches:
-      - main  # replace with your default branch if it's not "main"
+      - master  # replace with your default branch if it's not "main"
   pull_request:
     branches:
-      - main  # replace with your default branch if it's not "main"
+      - master  # replace with your default branch if it's not "main"
 
 jobs:
   build:
