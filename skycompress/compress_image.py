@@ -33,7 +33,7 @@ def compress_image(original_img: npt.NDArray[np.float64], byte_limit: int) -> by
     start_time = datetime.datetime.now()
     byte_limit = byte_limit  # 340 for Iridium, 3800 for FiPy
     jpeg_quality = 100
-        
+
     # Save the initial image chip for a size on disk reference
     _, jpeg_data = cv2.imencode('.jpg', original_img, [int(cv2.IMWRITE_JPEG_QUALITY), jpeg_quality])
     jpeg_data = bytearray(jpeg_data)
@@ -44,12 +44,11 @@ def compress_image(original_img: npt.NDArray[np.float64], byte_limit: int) -> by
 
     best_quality = min_quality
     best_dimension = min_dimension
-    best_size = float('inf')
 
     try:
         while min_quality <= max_quality and min_dimension <= max_dimension:
             # tune the mid quality option to balance what ratio you want quality & dimension
-            mid_quality = (min_quality + max_quality ) // 2
+            mid_quality = (min_quality + max_quality) // 2
             # tune the mid quality option to balance what ratio you want quality / dimension
             mid_dimension = (min_dimension + max_dimension) / 2
             
@@ -62,7 +61,6 @@ def compress_image(original_img: npt.NDArray[np.float64], byte_limit: int) -> by
                 if mid_quality > best_quality:
                     best_quality = mid_quality
                     best_dimension = mid_dimension
-                    best_size = out_image_size
                 min_quality = mid_quality + 1
                 min_dimension = mid_dimension + 0.01
             else:
