@@ -1,5 +1,5 @@
 import numpy as np
-from skycompress import compress_image  
+from skycompress import compress_image
 import pytest
 
 
