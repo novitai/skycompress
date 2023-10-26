@@ -1,8 +1,8 @@
 import logging
+import time
 import cv2  # type: ignore
 import numpy as np  # type: ignore
 import numpy.typing as npt  # type: ignore
-import datetime
 from pathlib import Path
 
 
@@ -30,7 +30,7 @@ def compress_image(original_img: npt.NDArray[np.float64], byte_limit: int) -> by
     """
 
     # Function variables
-    start_time = datetime.datetime.now()
+    start_time = time.perf_counter()
     byte_limit = byte_limit  # 340 for Iridium, 3800 for FiPy
     jpeg_quality = 100
 
@@ -70,8 +70,9 @@ def compress_image(original_img: npt.NDArray[np.float64], byte_limit: int) -> by
         # Recreate the image with the best parameters found
         best_img = cv2.resize(original_img, (0, 0), fx=best_dimension, fy=best_dimension)
         _, best_jpeg_data = cv2.imencode('.jpg', best_img, [int(cv2.IMWRITE_JPEG_QUALITY), best_quality])
-        end_time = datetime.datetime.now()
-        LOGGER.info(f'image compression end time {end_time - start_time}')
+        end_time = time.perf_counter()
+        LOGGER.info(f'image compression took {end_time - start_time} seconds')
         return best_jpeg_data
     except Exception as e:
         LOGGER.warning(f'Failed to compress: \n {e}')
+        return bytearray(b'')
