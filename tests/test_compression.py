@@ -1,6 +1,7 @@
 import numpy as np  # type: ignore
-from skycompress import compress_image
 import pytest  # type: ignore
+
+from skycompress import compress_image
 
 
 def generate_image(shape, value=255, dtype=np.float64):

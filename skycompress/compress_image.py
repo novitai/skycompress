@@ -1,10 +1,10 @@
 import logging
 import time
+from pathlib import Path
+
 import cv2  # type: ignore
 import numpy as np  # type: ignore
 import numpy.typing as npt  # type: ignore
-from pathlib import Path
-
 
 LOGGER = logging.getLogger(__name__)
 LOGGER = logging.getLogger(Path(__file__).resolve().stem)
