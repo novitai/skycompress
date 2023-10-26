@@ -51,7 +51,7 @@ def compress_image(original_img: npt.NDArray[np.float64], byte_limit: int) -> by
             mid_quality = (min_quality + max_quality) // 2
             # tune the mid quality option to balance what ratio you want quality / dimension
             mid_dimension = (min_dimension + max_dimension) / 2
-            
+
             new_img = cv2.resize(original_img, (0, 0), fx=mid_dimension, fy=mid_dimension)
             _, jpeg_data = cv2.imencode('.jpg', new_img, [int(cv2.IMWRITE_JPEG_QUALITY), mid_quality])
             out_image_size = len(bytearray(jpeg_data))
@@ -75,5 +75,3 @@ def compress_image(original_img: npt.NDArray[np.float64], byte_limit: int) -> by
         return best_jpeg_data
     except Exception as e:
         LOGGER.warning(f'Failed to compress: \n {e}')
-
-
