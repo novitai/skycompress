@@ -14,11 +14,11 @@ def run_compression_test(img_shape, byte_limit):
     img = generate_image(img_shape)
     compressed_img = compress_image(img, byte_limit)
 
-    assert compressed_img is not None, f"Compression failed for rgb image of shape {img_shape}" \
-                                       f" with byte limit {byte_limit}."
+    assert compressed_img is not None, \
+        f"Compression failed for rgb image of shape {img_shape} with byte limit {byte_limit}."
     assert isinstance(compressed_img, np.ndarray), "Compression output type mismatch: Expected numpy array."
-    assert len(bytearray(compressed_img)) <= byte_limit, "Compression exceeded byte limit" \
-                                                         f" for rgb image of shape {img_shape}."
+    assert len(bytearray(compressed_img)) <= byte_limit, \
+        "Compression exceeded byte limit for rgb image of shape {img_shape}."
 
 
 # Test basic functionality of compress_image
