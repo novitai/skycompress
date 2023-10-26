@@ -1,4 +1,4 @@
-import numpy as np
+import numpy as np  # type: ignore
 from skycompress import compress_image
 import pytest
 

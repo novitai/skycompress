@@ -1,7 +1,7 @@
 import logging
 import cv2  # type: ignore
-import numpy as np
-import numpy.typing as npt
+import numpy as np  # type: ignore
+import numpy.typing as npt  # type: ignore
 import datetime
 from pathlib import Path
 
