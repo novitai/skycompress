@@ -7,8 +7,6 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-numpy = "^1.23.5"
-opencv-python = "^4.6.0.66"
 pytest = "^7.4.2"
 
 [build-system]
