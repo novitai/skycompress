@@ -6,7 +6,7 @@ authors = ["Goksel Ozgur <gozgur@novit.ai>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 numpy = "^2.0"
 opencv-python = "^4.6.0.66"
 pytest = "^7.4.2"
