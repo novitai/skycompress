@@ -17,7 +17,7 @@ ch.setFormatter(formatter)
 logging.getLogger().addHandler(ch)
 
 
-def compress_image(original_img: npt.NDArray[np.uint8], byte_limit: int, format: str = 'jpeg') -> bytearray:
+def compress_image(original_img: npt.NDArray[np.uint8], byte_limit: int, format: str = 'jpeg') -> npt.NDArray[np.uint8]:
     """
     Function to compress the image to a set number of bytes
 
@@ -27,7 +27,7 @@ def compress_image(original_img: npt.NDArray[np.uint8], byte_limit: int, format:
     format = Compression format, either 'jpeg' or 'webp'
 
     Outputs
-    compressed_data = Compressed image, encoded as a jpeg or webp format byte array
+    compressed_data = Compressed image, encoded as a jpeg or webp format numpy array
     """
     start_time = time.perf_counter()
     jpeg_quality = 100
@@ -63,7 +63,7 @@ def compress_image(original_img: npt.NDArray[np.uint8], byte_limit: int, format:
 
             out_image_size = len(bytearray(compressed_data))
             if out_image_size == byte_limit:
-                return compressed_data  # Exit early if we've hit the byte limit exactly
+                return np.frombuffer(compressed_data, dtype=np.uint8)  # Exit early if we've hit the byte limit exactly
             elif out_image_size < byte_limit:
                 if mid_quality > best_quality:
                     best_quality = mid_quality
@@ -80,11 +80,11 @@ def compress_image(original_img: npt.NDArray[np.uint8], byte_limit: int, format:
             _, best_compressed_data = cv2.imencode('.jpeg', best_img, [int(cv2.IMWRITE_JPEG_QUALITY), best_quality])
         else:
             _, best_compressed_data = cv2.imencode('.webp', best_img, [int(cv2.IMWRITE_WEBP_QUALITY), best_quality])
-            best_compressed_data = bytearray(best_compressed_data)
-
+        
+        best_compressed_data = bytearray(best_compressed_data)
         end_time = time.perf_counter()
         LOGGER.info(f'image compression took {end_time - start_time} seconds')
-        return best_compressed_data
+        return np.frombuffer(best_compressed_data, dtype=np.uint8)
     except Exception as e:
         LOGGER.warning(f'Failed to compress: \n {e}')
-        return bytearray(b'')
+        return np.array([], dtype=np.uint8)
