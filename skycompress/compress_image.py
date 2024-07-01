@@ -80,7 +80,7 @@ def compress_image(original_img: npt.NDArray[np.uint8], byte_limit: int, format:
             _, best_compressed_data = cv2.imencode('.jpeg', best_img, [int(cv2.IMWRITE_JPEG_QUALITY), best_quality])
         else:
             _, best_compressed_data = cv2.imencode('.webp', best_img, [int(cv2.IMWRITE_WEBP_QUALITY), best_quality])
-        
+
         best_compressed_data = bytearray(best_compressed_data)
         end_time = time.perf_counter()
         LOGGER.info(f'image compression took {end_time - start_time} seconds')
