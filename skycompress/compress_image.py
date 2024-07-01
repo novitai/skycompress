@@ -5,10 +5,6 @@ from pathlib import Path
 import cv2  # type: ignore
 import numpy as np  # type: ignore
 import numpy.typing as npt  # type: ignore
-from turbojpeg import TurboJPEG, TJPF_BGR, TJFLAG_FASTDCT
-
-# Initialize TurboJPEG
-jpeg = TurboJPEG()
 
 LOGGER = logging.getLogger(__name__)
 LOGGER = logging.getLogger(Path(__file__).resolve().stem)
@@ -34,7 +30,6 @@ def compress_image(original_img: npt.NDArray[np.uint8], byte_limit: int, format:
     compressed_data = Compressed image, encoded as a jpeg or webp format byte array
     """
     start_time = time.perf_counter()
-    byte_limit = byte_limit
     jpeg_quality = 100
 
     if format == 'jpeg':
@@ -82,7 +77,7 @@ def compress_image(original_img: npt.NDArray[np.uint8], byte_limit: int, format:
         best_img = cv2.resize(original_img, (0, 0), fx=best_dimension, fy=best_dimension)
 
         if format == 'jpeg':
-            best_compressed_data = jpeg.encode(best_img, quality=best_quality, flags=TJFLAG_FASTDCT)
+            _, best_compressed_data = cv2.imencode('.jpeg', best_img, [int(cv2.IMWRITE_JPEG_QUALITY), best_quality])
         else:
             _, best_compressed_data = cv2.imencode('.webp', best_img, [int(cv2.IMWRITE_WEBP_QUALITY), best_quality])
             best_compressed_data = bytearray(best_compressed_data)
@@ -93,14 +88,3 @@ def compress_image(original_img: npt.NDArray[np.uint8], byte_limit: int, format:
     except Exception as e:
         LOGGER.warning(f'Failed to compress: \n {e}')
         return bytearray(b'')
-
-
-if __name__ == "__main__":
-    input_image_path = 'fig.jpeg'
-    desired_size_kb = 15
-    image = cv2.imread(input_image_path)
-
-    compressed_data = compress_image(image, desired_size_kb * 1024, format=format)
-
-    if compressed_data:
-        print(f"Compressed data length: {len(compressed_data)} bytes")
