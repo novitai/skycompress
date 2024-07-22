@@ -35,7 +35,7 @@ from skycompress import compress_image
 img = cv2.imread("path_to_your_image.jpg")
 
 # Compress the image
-compressed_img_data = compress_image(img, "rgb", 15000)  # Compress to 15000 bytes in RGB format
+compressed_img_data = compress_image(img, 15000)  # Compress to 15000 bytes in RGB format
 
 # Save the compressed image
 with open("compressed_image.jpg", "wb") as f:
