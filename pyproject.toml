@@ -2,7 +2,7 @@
 name = "skycompress"
 version = "0.1.0"
 description = "Compress the image with binary search algorithm to find best fit dimension and quality"
-authors = ["Goksel Ozgur <gozgur@novit.ai>"]
+authors = [{"name" = "Goksel Ozgur", "email" = "gozgur@novit.ai"}]
 readme = "README.md"
 
 [tool.poetry.dependencies]
