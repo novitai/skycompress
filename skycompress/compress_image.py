@@ -94,10 +94,11 @@ def compress_image(original_img: npt.NDArray[np.uint8], byte_limit: int, format:
         end_time = time.perf_counter()
         compressed_size = len(best_compressed_array)
         raw_size = len(original_img.tobytes())
-        LOGGER.info(f'image compression took {end_time - start_time} seconds')
-        LOGGER.info(f'Original image size: {original_img.shape}, Raw size: {raw_size/1024}kB, compressed size: {orig_image_size/1024}kB at quality={jpeg_quality}')
-        LOGGER.info(f'Output image size:{best_img.shape}, {compressed_size/1024}kB with quality={best_quality}, scaled by: {best_dimension}')
-        LOGGER.info(f'Overall reduction {orig_image_size  / compressed_size}x')
+        
+        LOGGER.info(f'Original image size: {original_img.shape}, Raw size: {raw_size/1024:.2f}kB, compressed size: {orig_image_size/1024:.2f}kB at quality={jpeg_quality}')
+        LOGGER.info(f'Target size is {byte_limit/1024:.2f}kB')
+        LOGGER.info(f'Output image size:{best_img.shape}, {compressed_size/1024:.2f}kB with quality={best_quality}, scaled by: {best_dimension}')
+        LOGGER.info(f'Overall reduction {orig_image_size  / compressed_size:.2f}x. Image compression took {end_time - start_time:.6f} seconds')
         return best_compressed_array 
     except Exception as e:
         LOGGER.warning(f'Failed to compress: \n {e}')
