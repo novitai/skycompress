@@ -6,7 +6,7 @@ from skycompress import compress_image
 
 def generate_image(shape, value=255, dtype=np.float64):
     """Helper function to generate an image with given parameters."""
-    return np.ones(shape, dtype) * value
+    return (np.random.random(shape) * value).astype(dtype)
 
 
 def run_compression_test(img_shape, byte_limit):
@@ -19,6 +19,9 @@ def run_compression_test(img_shape, byte_limit):
     assert isinstance(compressed_img, np.ndarray), "Compression output type mismatch: Expected numpy array."
     assert len(bytearray(compressed_img)) <= byte_limit, \
         "Compression exceeded byte limit for rgb image of shape {img_shape}."
+    assert len(bytearray(compressed_img)) > byte_limit *0.75, \
+        "Compression too high ({len(bytearray(compressed_img))}) for {img_shape}."
+
 
 
 # Test basic functionality of compress_image
