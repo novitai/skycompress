@@ -66,9 +66,11 @@ def compress_image(original_img: npt.NDArray[np.uint8], byte_limit: int, format:
                 _, compressed_data = cv2.imencode('.webp', new_img, [int(cv2.IMWRITE_WEBP_QUALITY), mid_quality])
 
             out_image_size = len(bytearray(compressed_data))
-            LOGGER.debug(f'tried quality: {mid_quality}, scale: {mid_dimension}, dims {new_img.shape}: filesize {out_image_size}')
+            LOGGER.debug(f'tried quality: {mid_quality}, scale: {mid_dimension}, dims {new_img.shape}: \
+                         filesize {out_image_size}')
             if out_image_size == byte_limit:
-                best_compressed_array =  np.frombuffer(compressed_data, dtype=np.uint8)  # Exit early if we've hit the byte limit exactly
+                # Exit early if we've hit the byte limit exactly
+                best_compressed_array = np.frombuffer(compressed_data, dtype=np.uint8)
                 exact_size_reached = True
                 break
             elif out_image_size < byte_limit:
@@ -80,7 +82,7 @@ def compress_image(original_img: npt.NDArray[np.uint8], byte_limit: int, format:
             else:
                 max_quality = mid_quality - 1
                 max_dimension = mid_dimension - 0.01
-        
+
         if not exact_size_reached:
             best_img = cv2.resize(original_img, (0, 0), fx=best_dimension, fy=best_dimension)
 
@@ -94,12 +96,15 @@ def compress_image(original_img: npt.NDArray[np.uint8], byte_limit: int, format:
         end_time = time.perf_counter()
         compressed_size = len(best_compressed_array)
         raw_size = len(original_img.tobytes())
-        
-        LOGGER.info(f'Original image size: {original_img.shape}, Raw size: {raw_size/1024:.2f}kB, compressed size: {orig_image_size/1024:.2f}kB at quality={jpeg_quality}')
+
+        LOGGER.info(f'Original image size: {original_img.shape}, Raw size: {raw_size/1024:.2f}kB, \
+                    compressed size: {orig_image_size/1024:.2f}kB at quality={jpeg_quality}')
         LOGGER.info(f'Target size is {byte_limit/1024:.2f}kB')
-        LOGGER.info(f'Output image size:{best_img.shape}, {compressed_size/1024:.2f}kB with quality={best_quality}, scaled by: {best_dimension}')
-        LOGGER.info(f'Overall reduction {orig_image_size  / compressed_size:.2f}x. Image compression took {end_time - start_time:.6f} seconds')
-        return best_compressed_array 
+        LOGGER.info(f'Output image size:{best_img.shape}, {compressed_size/1024:.2f}kB with quality={best_quality},\
+                     scaled by: {best_dimension}')
+        LOGGER.info(f'Overall reduction {orig_image_size  / compressed_size:.2f}x. Image compression took \
+                    {end_time - start_time:.6f} seconds')
+        return best_compressed_array
     except Exception as e:
         LOGGER.warning(f'Failed to compress: \n {e}')
         return np.array([], dtype=np.uint8)
