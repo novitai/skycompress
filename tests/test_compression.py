@@ -9,7 +9,7 @@ def generate_image(shape, value=255, dtype=np.float64):
     return (np.random.random(shape) * value).astype(dtype)
 
 
-def run_compression_test(img_shape, byte_limit):
+def run_compression_test(img_shape, byte_limit, format='.jpeg'):
     """Helper function to handle common compression testing logic."""
     img = generate_image(img_shape)
     compressed_img = compress_image(img, byte_limit)
@@ -31,8 +31,9 @@ def test_basic_compression():
 
 # Test compress_image with different shapes of input images
 @pytest.mark.parametrize("img_shape", [(512, 512, 3), (300, 600, 3), (600, 300, 3)])
-def test_shapes_compression(img_shape):
-    run_compression_test(img_shape, 5000)
+@pytest.mark.parametrize("format", ['.jpeg','.webp'])
+def test_shapes_compression(img_shape, format):
+    run_compression_test(img_shape, 5000, format)
 
 
 # Test compression of small image
