@@ -100,3 +100,7 @@ cookiecutter-pypackage-env/
 
 # IDE settings
 .vscode/
+
+# output images
+compressed*.webp
+compressed*.jpeg
