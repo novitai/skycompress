@@ -1,6 +1,6 @@
+import cv2  # type: ignore
 import numpy as np  # type: ignore
 import pytest  # type: ignore
-import cv2
 
 from skycompress import compress_image
 
