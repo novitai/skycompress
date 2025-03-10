@@ -39,15 +39,19 @@ def compress_image(original_img: npt.NDArray[np.uint8], byte_limit: int, format:
     else:
         raise ValueError("Unsupported format. Use 'jpeg' or 'webp'.")
 
+    # TODO remove - only used to compute orig image size
     _, compressed_data = cv2.imencode(f'.{format}', original_img, encode_param)
     compressed_data = bytearray(compressed_data)
-    out_image_size = len(compressed_data)
+    orig_image_size = len(compressed_data)
 
     min_quality, max_quality = 0, 100
     min_dimension, max_dimension = 0.1, 1.0
 
     best_quality = min_quality
     best_dimension = min_dimension
+
+    best_compressed_array = np.array([], dtype=np.uint8)
+    exact_size_reached = False
 
     try:
         while min_quality <= max_quality and min_dimension <= max_dimension:
@@ -62,8 +66,13 @@ def compress_image(original_img: npt.NDArray[np.uint8], byte_limit: int, format:
                 _, compressed_data = cv2.imencode('.webp', new_img, [int(cv2.IMWRITE_WEBP_QUALITY), mid_quality])
 
             out_image_size = len(bytearray(compressed_data))
+            LOGGER.debug(f'tried quality: {mid_quality}, scale: {mid_dimension}, dims {new_img.shape}: \
+                         filesize {out_image_size}')
             if out_image_size == byte_limit:
-                return np.frombuffer(compressed_data, dtype=np.uint8)  # Exit early if we've hit the byte limit exactly
+                # Exit early if we've hit the byte limit exactly
+                best_compressed_array = np.frombuffer(compressed_data, dtype=np.uint8)
+                exact_size_reached = True
+                break
             elif out_image_size < byte_limit:
                 if mid_quality > best_quality:
                     best_quality = mid_quality
@@ -74,17 +83,28 @@ def compress_image(original_img: npt.NDArray[np.uint8], byte_limit: int, format:
                 max_quality = mid_quality - 1
                 max_dimension = mid_dimension - 0.01
 
-        best_img = cv2.resize(original_img, (0, 0), fx=best_dimension, fy=best_dimension)
+        if not exact_size_reached:
+            best_img = cv2.resize(original_img, (0, 0), fx=best_dimension, fy=best_dimension)
 
-        if format == 'jpeg':
-            _, best_compressed_data = cv2.imencode('.jpeg', best_img, [int(cv2.IMWRITE_JPEG_QUALITY), best_quality])
-        else:
-            _, best_compressed_data = cv2.imencode('.webp', best_img, [int(cv2.IMWRITE_WEBP_QUALITY), best_quality])
+            if format == 'jpeg':
+                _, best_compressed_data = cv2.imencode('.jpeg', best_img, [int(cv2.IMWRITE_JPEG_QUALITY), best_quality])
+            else:
+                _, best_compressed_data = cv2.imencode('.webp', best_img, [int(cv2.IMWRITE_WEBP_QUALITY), best_quality])
 
-        best_compressed_data = bytearray(best_compressed_data)
+            best_compressed_data = bytearray(best_compressed_data)
+            best_compressed_array = np.frombuffer(best_compressed_data, dtype=np.uint8)
         end_time = time.perf_counter()
-        LOGGER.info(f'image compression took {end_time - start_time} seconds')
-        return np.frombuffer(best_compressed_data, dtype=np.uint8)
+        compressed_size = len(best_compressed_array)
+        raw_size = len(original_img.tobytes())
+
+        LOGGER.info(f'Original image size: {original_img.shape}, Raw size: {raw_size/1024:.2f}kB, \
+                    compressed size: {orig_image_size/1024:.2f}kB at quality={jpeg_quality}')
+        LOGGER.info(f'Target size is {byte_limit/1024:.2f}kB')
+        LOGGER.info(f'Output image size:{best_img.shape}, {compressed_size/1024:.2f}kB with quality={best_quality},\
+                     scaled by: {best_dimension}')
+        LOGGER.info(f'Overall reduction {orig_image_size  / compressed_size:.2f}x. Image compression took \
+                    {end_time - start_time:.6f} seconds')
+        return best_compressed_array
     except Exception as e:
         LOGGER.warning(f'Failed to compress: \n {e}')
         return np.array([], dtype=np.uint8)
