@@ -1,0 +1,16 @@
+name: Continuous Integration
+run-name: "CI: ${{ github.event_name}} on ${{ github.ref_name }} (into ${{ github.base_ref }})"
+# Used for continuous builds as features are being developed and reviewed
+
+on:
+  push:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches: [develop]
+
+jobs:
+  python_lint:
+    uses: ArchangelImaging/infra-github-actions/.github/workflows/python_checks.yml@feat/python-lint
+    secrets: inherit
+    permissions:
+      contents: read  # required to read repo
