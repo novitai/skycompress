@@ -13,4 +13,4 @@ jobs:
     uses: ArchangelImaging/infra-github-actions/.github/workflows/python_checks.yml@feat/python-lint
     secrets: inherit
     permissions:
-      contents: read  # required to read repo
+      contents: read  #  required to read repo
