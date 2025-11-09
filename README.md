@@ -123,7 +123,7 @@ pub fn compress_image(
 
 ### Performance
 
-Real benchmark results on M1 Mac (1200x800 image, 460KB WebP):
+Real benchmark results on M2 Mac (1200x800 image, 460KB WebP):
 
 | Target Size | Python (OpenCV) | Rust (image crate) | Rust (OpenCV) | Winner |
 |-------------|----------------|-------------------|---------------|--------|
