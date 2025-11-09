@@ -1,0 +1,19 @@
+[package]
+name = "skycompress"
+version = "0.1.0"
+edition = "2021"
+authors = ["Novitak Team"]
+description = "Image compression library with byte-limit targeting using binary search optimization"
+license = "MIT"
+repository = "https://github.com/novitai/skycompress"
+keywords = ["image", "compression", "jpeg", "webp", "optimization"]
+categories = ["multimedia::images"]
+
+[dependencies]
+image = { version = "0.25", features = ["jpeg", "webp"] }
+thiserror = "1.0"
+tracing = "0.1"
+
+[dev-dependencies]
+criterion = "0.5"
+tracing-subscriber = "0.3"
