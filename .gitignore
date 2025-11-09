@@ -104,3 +104,8 @@ cookiecutter-pypackage-env/
 # output images
 compressed*.webp
 compressed*.jpeg
+
+
+# Added by cargo
+
+/target
