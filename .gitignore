@@ -104,8 +104,14 @@ cookiecutter-pypackage-env/
 # output images
 compressed*.webp
 compressed*.jpeg
+*_compressed_*.jpg
+*_compressed_*.webp
+opencv_compressed_*.jpg
+rust_compressed_*.jpg
+python_compressed_*.jpg
 
 
 # Added by cargo
 
 /target
+Cargo.lock
