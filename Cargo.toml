@@ -10,9 +10,15 @@ keywords = ["image", "compression", "jpeg", "webp", "optimization"]
 categories = ["multimedia::images"]
 
 [dependencies]
-image = { version = "0.25", features = ["jpeg", "webp"] }
+image = { version = "0.25", features = ["jpeg", "webp"], optional = true }
+opencv = { version = "0.97", default-features = false, features = ["imgcodecs", "imgproc"], optional = true }
 thiserror = "1.0"
 tracing = "0.1"
+
+[features]
+default = ["image-backend"]
+opencv-backend = ["opencv"]
+image-backend = ["image"]
 
 [dev-dependencies]
 criterion = "0.5"
