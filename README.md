@@ -34,7 +34,91 @@ skycompress = { git = "https://github.com/novitai/skycompress", branch = "featur
 skycompress = { git = "https://github.com/novitai/skycompress", branch = "feature/rust-rewrite", features = ["opencv-backend"], default-features = false }
 ```
 
+**CLI binary:**
+```bash
+# Build CLI
+cargo build --release --bin skycompress
+
+# Install globally
+cargo install --path . --bin skycompress
+```
+
+**Python package (with maturin):**
+```bash
+# Install maturin
+pip install maturin
+
+# Build and install (development)
+maturin develop --features python
+
+# Build wheel for distribution
+maturin build --release --features python
+```
+
 ### Usage
+
+#### Command Line (CLI)
+
+```bash
+# Compress image to 50KB
+skycompress input.jpg output.jpg --target-size 50KB
+
+# With size suffixes
+skycompress photo.png compressed.jpg -t 1MB
+
+# With verbose logging
+skycompress input.jpg output.jpg -t 100000 --verbose
+
+# Specify format (currently jpeg only)
+skycompress input.png output.jpg -t 50KB --format jpeg
+```
+
+**CLI Features:**
+- ✅ Target size with KB/MB suffixes
+- ✅ Verbose logging with `--verbose`
+- ✅ Format selection (jpeg supported)
+- ✅ Progress reporting
+- ✅ Error handling with clear messages
+
+#### Python API
+
+```python
+import skycompress
+
+# Compress image file
+compressed_size = skycompress.compress_image(
+    "input.jpg",
+    "output.jpg",
+    target_size=50000,  # 50KB
+    format="jpeg"
+)
+print(f"Compressed to {compressed_size} bytes")
+
+# Compress image bytes
+with open("photo.jpg", "rb") as f:
+    image_bytes = f.read()
+
+compressed = skycompress.compress_bytes(
+    image_bytes,
+    target_size=50000,
+    format="jpeg"
+)
+
+with open("compressed.jpg", "wb") as f:
+    f.write(compressed)
+
+# Get library version
+print(skycompress.version())  # "0.1.0"
+```
+
+**Python Features:**
+- ✅ File-based compression (`compress_image`)
+- ✅ Bytes-based compression (`compress_bytes`)
+- ✅ Type hints and docstrings
+- ✅ ValueError exceptions for invalid parameters
+- ✅ Requires Python 3.8+
+
+#### Rust Library
 
 **Pure Rust backend (image crate):**
 ```rust
@@ -180,11 +264,11 @@ cargo build --release --features opencv-backend --no-default-features
 - [x] Pure Rust backend (image crate)
 - [x] OpenCV backend (fast)
 - [x] JPEG compression
+- [x] CLI tool for standalone usage
+- [x] Python bindings (PyO3)
 - [ ] WebP format support
 - [ ] PNG format support
 - [ ] Multi-threaded batch compression
-- [ ] CLI tool for standalone usage
-- [ ] Python bindings (PyO3)
 - [ ] WASM target support
 
 ### Contributing
