@@ -1,22 +1,48 @@
+[build-system]
+requires = ["maturin>=1.4,<2.0"]
+build-backend = "maturin"
+
 [project]
 name = "skycompress"
 version = "0.1.0"
-description = "Compress the image with binary search algorithm to find best fit dimension and quality"
-authors = [{"name" = "Goksel Ozgur", "email" = "gozgur@novit.ai"}]
+description = "Image compression with byte-limit targeting using binary search optimization (Rust-powered)"
 readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+keywords = ["image", "compression", "jpeg", "webp", "optimization", "rust"]
+authors = [
+    { name = "Novitak Team", email = "info@novit.ai" }
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Multimedia :: Graphics",
+]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-numpy = "^1.23.5"
-opencv-python = "^4.11.0.86"
-pytest = "^7.4.2"
-PyTurboJPEG = "1.7.3"
+[project.urls]
+Homepage = "https://github.com/novitai/skycompress"
+Repository = "https://github.com/novitai/skycompress"
+Documentation = "https://github.com/novitai/skycompress#readme"
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.maturin]
+features = ["python"]
+module-name = "skycompress"
 
 [tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
 disallow_untyped_defs = true
-ignore_missing_imports = true
-exclude = "tests"
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
