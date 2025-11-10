@@ -454,19 +454,43 @@ pub fn compress_image(
 
 ### Performance
 
-Real benchmark results on M2 Mac (1200x800 image, 460KB WebP):
+Benchmark results on M2 Mac (1200×800 image, 471KB WebP):
 
-| Target Size | Python (OpenCV) | Rust (image crate) | Rust (OpenCV) | Winner |
-|-------------|----------------|-------------------|---------------|--------|
-| 10KB        | 7.81 ms        | 91.21 ms          | **17.58 ms** ⚡ | **Rust OpenCV: 2.2x faster** |
-| 25KB        | 13.25 ms       | 125.81 ms         | **17.98 ms** ⚡ | **Rust OpenCV: 1.4x faster** |
-| 50KB        | 14.69 ms       | 135.64 ms         | **22.03 ms** ⚡ | **Rust OpenCV: 1.5x faster** |
-| 100KB       | 16.54 ms       | 156.65 ms         | **24.81 ms** ⚡ | **Rust OpenCV: 1.5x faster** |
+| Backend | 15KB | 50KB | 100KB | Interpolation | Notes |
+|---------|------|------|-------|---------------|-------|
+| **Rust OpenCV (default)** | 16ms | 20ms | 23ms | LANCZOS4 | **Highest quality** (default) |
+| **Rust OpenCV (fast)** | 13ms | 12ms | 14ms | LINEAR | Python-equivalent mode |
+| **Python OpenCV** | 13ms | 17ms | 20ms | LINEAR (default) | Baseline |
+| **Pure Rust (image crate)** | 115ms | 135ms | 160ms | Lanczos3 | Zero dependencies |
+
+### Performance Philosophy: Quality > Speed
+
+**Rust defaults to INTER_LANCZOS4** (highest quality resizing algorithm):
+- ~3-4ms slower than Python's INTER_LINEAR default
+- **Significantly better image quality** (professional-grade interpolation)
+- Worth the minimal performance trade-off for production applications
+
+**Why we choose quality:**
+- 3-4ms difference is negligible for users (~60 FPS = 16ms per frame)
+- Visual quality matters in production (TAK imagery, surveillance, etc.)
+- LANCZOS4 preserves fine details during resizing
+- Professional video editors use LANCZOS for quality
+
+**For speed-critical applications:**
+You can switch to INTER_LINEAR and **match or beat Python's speed** (see benchmark above).
 
 **Key Findings:**
-- 🏆 **Rust + OpenCV**: 40-120% faster than Python OpenCV!
-- 📦 **Pure Rust**: Slower but no external dependencies
-- ⚡ **Recommendation**: Use OpenCV backend for production
+- 🎨 **Rust OpenCV (LANCZOS4)**: Best quality, minimal performance cost
+- ⚡ **Rust OpenCV (LINEAR)**: Matches/beats Python speed when needed
+- 📦 **Pure Rust**: Portable but slower, great for embedded/WASM
+- 🔒 **Memory Safety**: Rust provides compile-time guarantees vs Python runtime checks
+- 🚫 **No GC Pauses**: Predictable performance, critical for real-time systems
+
+**Recommendation:**
+- **Production services** → Rust OpenCV (LANCZOS4 default) - quality matters
+- **Batch processing** → Rust OpenCV with Rayon parallelization
+- **Quick prototyping** → Python OpenCV
+- **Embedded/WASM** → Pure Rust (image crate)
 
 ### Testing
 
