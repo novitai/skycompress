@@ -2,17 +2,30 @@
 //!
 //! High-performance compression using OpenCV bindings
 
+mod adaptive;
+mod cache;
 mod compress;
 mod encode;
 mod errors;
 mod format;
 mod io;
-mod resize;
+mod io_mmap;
+mod parallel;
+pub mod resize;
+mod rtsp;
+mod similarity_cache;
 
+pub use adaptive::compress_image_adaptive;
+pub use cache::{cache_stats, clear_cache, compress_with_cache};
 pub use compress::compress_image;
 pub use errors::{CompressionError, Result};
 pub use format::ImageFormat;
 pub use io::load_image;
+pub use io_mmap::{load_image_mmap, save_image};
+pub use parallel::compress_image_parallel;
+pub use resize::InterpolationMode;
+pub use rtsp::{compress_rtsp_frame, compress_rtsp_frame_with_cache, compress_rtsp_frames_batch};
+pub use similarity_cache::{CacheStats as SimilarityCacheStats, SimilarityCache};
 
 #[cfg(test)]
 mod tests {
