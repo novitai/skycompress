@@ -18,3 +18,7 @@ pub mod image_backend;
 
 #[cfg(all(feature = "image-backend", not(feature = "opencv-backend")))]
 pub use image_backend::{compress_image, ImageFormat, CompressionError, Result};
+
+// Python bindings
+#[cfg(feature = "python")]
+pub mod python;
