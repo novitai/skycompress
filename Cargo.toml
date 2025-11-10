@@ -9,16 +9,30 @@ repository = "https://github.com/novitai/skycompress"
 keywords = ["image", "compression", "jpeg", "webp", "optimization"]
 categories = ["multimedia::images"]
 
+[lib]
+name = "skycompress"
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "skycompress"
+path = "src/bin/cli.rs"
+required-features = ["cli"]
+
 [dependencies]
 image = { version = "0.25", features = ["jpeg", "webp"], optional = true }
 opencv = { version = "0.97", default-features = false, features = ["imgcodecs", "imgproc"], optional = true }
 thiserror = "1.0"
 tracing = "0.1"
+clap = { version = "4.5", features = ["derive"], optional = true }
+pyo3 = { version = "0.20", features = ["extension-module"], optional = true }
+tracing-subscriber = { version = "0.3", optional = true }
 
 [features]
-default = ["image-backend"]
+default = ["image-backend", "cli"]
 opencv-backend = ["opencv"]
 image-backend = ["image"]
+cli = ["clap", "image-backend", "tracing-subscriber"]
+python = ["pyo3", "image-backend"]
 
 [dev-dependencies]
 criterion = "0.5"
