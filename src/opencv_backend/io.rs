@@ -6,7 +6,7 @@ use opencv::{
     prelude::*,
 };
 
-use super::opencv_backend_errors::{CompressionError, Result};
+use super::errors::{CompressionError, Result};
 
 /// Load image from file path
 ///

@@ -2,17 +2,17 @@
 //!
 //! High-performance compression using OpenCV bindings
 
-mod opencv_backend_compress;
-mod opencv_backend_encode;
-mod opencv_backend_errors;
-mod opencv_backend_format;
-mod opencv_backend_io;
-mod opencv_backend_resize;
+mod compress;
+mod encode;
+mod errors;
+mod format;
+mod io;
+mod resize;
 
-pub use opencv_backend_compress::compress_image;
-pub use opencv_backend_errors::{CompressionError, Result};
-pub use opencv_backend_format::ImageFormat;
-pub use opencv_backend_io::load_image;
+pub use compress::compress_image;
+pub use errors::{CompressionError, Result};
+pub use format::ImageFormat;
+pub use io::load_image;
 
 #[cfg(test)]
 mod tests {

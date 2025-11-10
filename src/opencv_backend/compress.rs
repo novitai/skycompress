@@ -2,10 +2,10 @@
 
 use opencv::{core::Mat, prelude::*};
 
-use super::opencv_backend_errors::{CompressionError, Result};
-use super::opencv_backend_encode::encode_image;
-use super::opencv_backend_format::ImageFormat;
-use super::opencv_backend_resize::resize_image;
+use super::errors::{CompressionError, Result};
+use super::encode::encode_image;
+use super::format::ImageFormat;
+use super::resize::resize_image;
 
 /// Compress an image to fit within a byte limit using OpenCV
 ///

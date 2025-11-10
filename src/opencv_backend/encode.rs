@@ -3,10 +3,11 @@
 use opencv::{
     core::{Mat, Vector},
     imgcodecs::imencode,
+    prelude::VectorToVec,
 };
 
-use super::opencv_backend_errors::Result;
-use super::opencv_backend_format::ImageFormat;
+use super::errors::Result;
+use super::format::ImageFormat;
 
 /// Encode image with specified quality
 ///
